@@ -661,16 +661,12 @@ input { font-family: inherit; }
                     <span x-text="p.a"></span> <span x-text="bandera(p.a)"></span>
                   </div>
                 </div>
-                <template x-if="!editingId || editingId !== p.id">
-                  <template x-if="resultados[p.id]">
-                    <button class="res-score" @click="startEditRes(p.id)"
-                            x-text="resultados[p.id].h + ' · ' + resultados[p.id].a"></button>
-                  </template>
+                <template x-if="editingId !== p.id && resultados[p.id]">
+                  <button class="res-score" @click="startEditRes(p.id)"
+                          x-text="resultados[p.id].h + ' · ' + resultados[p.id].a"></button>
                 </template>
-                <template x-if="!editingId || editingId !== p.id">
-                  <template x-if="!resultados[p.id]">
-                    <button class="res-plus" @click="startEditRes(p.id)">＋</button>
-                  </template>
+                <template x-if="editingId !== p.id && !resultados[p.id]">
+                  <button class="res-plus" @click="startEditRes(p.id)">＋</button>
                 </template>
                 <template x-if="editingId === p.id">
                   <div class="res-edit">
