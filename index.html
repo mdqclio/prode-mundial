@@ -761,7 +761,7 @@ input { font-family: inherit; }
             <span style="font-size: 20px; color: #facc15;">👥</span>
             <h2 class="modal-h2-text">JUGADORES</h2>
           </div>
-          <button class="edit-btn" :class="{ active: editandoJugadores }" @click="editandoJugadores ? guardarJugadores() : (editandoJugadores = true)">
+          <button class="edit-btn" :class="{ active: editandoJugadores }" @click="editandoJugadores ? guardarJugadores() : iniciarEdicionJugadores()">
             <template x-if="!editandoJugadores"><span>✏️ EDITAR</span></template>
             <template x-if="editandoJugadores"><span>✓ GUARDAR</span></template>
           </button>
@@ -950,7 +950,7 @@ function prodeApp() {
 
       if (groupIdFromUrl) {
         try {
-          const snap = await db.ref(`grupos/${groupIdFromUrl}`).once('value');
+          const snap = await this.onceWithTimeout(db.ref(`grupos/${groupIdFromUrl}`));
           if (snap.exists()) {
             const grupo = snap.val();
             grupo.id = groupIdFromUrl;
@@ -968,7 +968,7 @@ function prodeApp() {
       const lastJugador = localStorage.getItem('prode-last-jugador');
       if (lastGroup) {
         try {
-          const snap = await db.ref(`grupos/${lastGroup}`).once('value');
+          const snap = await this.onceWithTimeout(db.ref(`grupos/${lastGroup}`));
           if (snap.exists()) {
             const grupo = snap.val();
             grupo.id = lastGroup;
@@ -986,6 +986,18 @@ function prodeApp() {
     fmtPlata(n) {
       if (!n || n === 0) return '$0';
       return '$' + Math.round(n).toLocaleString('es-AR');
+    },
+
+    nombreInvalido(nombre) {
+      // Firebase RTDB no permite estos caracteres en una clave de path.
+      return /[.#$\[\]\/]/.test(nombre);
+    },
+
+    onceWithTimeout(ref, ms = 7000) {
+      return Promise.race([
+        ref.once('value'),
+        new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), ms))
+      ]);
     },
 
     bandera(team) { return BANDERAS[team] || '🏳️'; },
@@ -1109,6 +1121,9 @@ function prodeApp() {
     agregarJugadorForm() {
       const nombre = this.nuevoJugador.trim();
       if (!nombre) return;
+      if (this.nombreInvalido(nombre)) {
+        alert('El nombre no puede contener . # $ [ ] /'); return;
+      }
       if (this.jugadoresForm.some(j => j.nombre.toLowerCase() === nombre.toLowerCase())) {
         alert('Ya está agregado'); return;
       }
@@ -1159,7 +1174,7 @@ function prodeApp() {
       this.yaBusque = true;
       this.resultadosBusqueda = [];
       try {
-        const snap = await db.ref('grupos').once('value');
+        const snap = await this.onceWithTimeout(db.ref('grupos'));
         if (snap.exists()) {
           const all = snap.val();
           const found = [];
@@ -1226,6 +1241,12 @@ function prodeApp() {
           data.id = id;
           data.jugadores = data.jugadores || [];
           this.grupoActual = data;
+          // Si el jugador actual ya no existe (borrado desde otro dispositivo), lo limpiamos.
+          if (this.jugadorActual && !data.jugadores.some(j => j.nombre === this.jugadorActual)) {
+            this.jugadorActual = null;
+            this.pronosticos = {};
+            localStorage.removeItem('prode-last-jugador');
+          }
         }
       });
       this.listenerRefs.push({ ref: grupoRef, listener: grupoListener, type: 'value' });
@@ -1313,6 +1334,9 @@ function prodeApp() {
     agregarJugadorGrupo() {
       const nombre = this.nuevoJugadorEdit.trim();
       if (!nombre) return;
+      if (this.nombreInvalido(nombre)) {
+        alert('El nombre no puede contener . # $ [ ] /'); return;
+      }
       if (this.jugadoresEditar.some(j => j.nombre.toLowerCase() === nombre.toLowerCase())) {
         alert('Ya existe ese jugador'); return;
       }
@@ -1323,6 +1347,14 @@ function prodeApp() {
     },
 
     quitarJugadorGrupo(nombre) {
+      if (nombre === this.jugadorActual) {
+        alert('No podés borrarte a vos mismo mientras jugás como ese jugador. Cambiá de jugador primero.');
+        return;
+      }
+      if (this.jugadoresEditar.length <= 2) {
+        alert('El grupo necesita al menos 2 jugadores.');
+        return;
+      }
       if (!confirm(`¿Sacar a ${nombre} del grupo? Se borran sus pronósticos.`)) return;
       this.jugadoresEditar = this.jugadoresEditar.filter(j => j.nombre !== nombre);
     },
