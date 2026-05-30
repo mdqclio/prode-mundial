@@ -709,7 +709,7 @@ input { font-family: inherit; }
               <div class="num-picker">
                 <button class="num-btn" :disabled="resultados[partidoActivo.id] || h === 0" @click="h = Math.max(0, h - 1)">−</button>
                 <div class="num-display" :style="`border-color: ${grupoColor(partidoActivo.g)}; color: ${grupoColor(partidoActivo.g)}`" x-text="h"></div>
-                <button class="num-btn" :disabled="resultados[partidoActivo.id]" @click="h = Math.min(15, h + 1)">+</button>
+                <button class="num-btn" :disabled="!!resultados[partidoActivo.id]" @click="h = Math.min(15, h + 1)">+</button>
               </div>
             </div>
             <div class="vs-big">VS</div>
@@ -719,7 +719,7 @@ input { font-family: inherit; }
               <div class="num-picker">
                 <button class="num-btn" :disabled="resultados[partidoActivo.id] || a === 0" @click="a = Math.max(0, a - 1)">−</button>
                 <div class="num-display" :style="`border-color: ${grupoColor(partidoActivo.g)}; color: ${grupoColor(partidoActivo.g)}`" x-text="a"></div>
-                <button class="num-btn" :disabled="resultados[partidoActivo.id]" @click="a = Math.min(15, a + 1)">+</button>
+                <button class="num-btn" :disabled="!!resultados[partidoActivo.id]" @click="a = Math.min(15, a + 1)">+</button>
               </div>
             </div>
           </div>
