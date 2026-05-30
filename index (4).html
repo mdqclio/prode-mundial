@@ -1,0 +1,1372 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#0a0e1a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Prode 26 · Mundial</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=JetBrains+Mono:wght@400;700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+
+<style>
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; }
+html, body { overflow-x: hidden; }
+body { font-family: 'DM Sans', system-ui, sans-serif; background: linear-gradient(180deg, #0a0e1a 0%, #0f172a 100%); color: #f1f5f9; min-height: 100vh; padding-bottom: 40px; }
+button { cursor: pointer; border: none; background: none; font-family: inherit; color: inherit; }
+input { font-family: inherit; }
+[x-cloak] { display: none !important; }
+
+@keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+@keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+.scrollX::-webkit-scrollbar { display: none; }
+.scrollX { -ms-overflow-style: none; scrollbar-width: none; overflow-x: auto; white-space: nowrap; }
+
+/* ============ LOADING ============ */
+.loading { min-height: 100vh; background: #0a0e1a; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px; }
+.loading-ball { font-size: 60px; animation: pulse 1s ease-in-out infinite; }
+.loading-text { font-family: 'Anton', sans-serif; color: #facc15; letter-spacing: 4px; font-size: 14px; }
+
+/* ============ INICIO ============ */
+.inicio { min-height: 100vh; display: flex; flex-direction: column; padding: 24px 20px; }
+.hero { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 8px; }
+.title { font-family: 'Anton', sans-serif; font-size: 56px; letter-spacing: 4px; background: linear-gradient(90deg, #38bdf8 0%, #facc15 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; line-height: 1; }
+.subtitle { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #64748b; margin-top: 8px; letter-spacing: 2px; font-weight: 700; }
+.hero-badge { margin-top: 24px; background: rgba(250, 204, 21, 0.1); border: 1px solid rgba(250, 204, 21, 0.3); color: #facc15; padding: 8px 14px; border-radius: 20px; font-size: 11px; font-weight: 800; letter-spacing: 2px; font-family: 'JetBrains Mono', monospace; display: inline-flex; align-items: center; gap: 6px; }
+.inicio-botones { display: flex; flex-direction: column; gap: 12px; margin-top: 20px; }
+.btn-primary { background: linear-gradient(90deg, #38bdf8 0%, #facc15 100%); color: #0a0e1a; padding: 18px 20px; border-radius: 14px; display: flex; align-items: center; gap: 14px; width: 100%; text-align: left; }
+.btn-secondary { background: #1e293b; border: 1px solid #334155; color: #f1f5f9; padding: 18px 20px; border-radius: 14px; display: flex; align-items: center; gap: 14px; width: 100%; text-align: left; }
+.btn-label { flex: 1; }
+.btn-label-main { font-size: 16px; font-weight: 700; font-family: 'Anton', sans-serif; letter-spacing: 1px; }
+.btn-label-sub { font-size: 11px; opacity: 0.7; font-weight: 500; margin-top: 2px; }
+
+/* ============ FORM ============ */
+.form-container { min-height: 100vh; }
+.form-header { display: flex; align-items: center; gap: 12px; padding: 16px 20px; border-bottom: 1px solid #1e293b; position: sticky; top: 0; background: #0a0e1a; z-index: 10; }
+.back-btn { width: 36px; height: 36px; border-radius: 8px; background: #1e293b; color: #cbd5e1; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.form-title { font-family: 'Anton', sans-serif; font-size: 22px; color: #f1f5f9; letter-spacing: 2px; }
+.form-body { padding: 20px; }
+.input-group { margin-bottom: 16px; }
+.label { display: block; font-size: 10px; font-weight: 800; letter-spacing: 2px; color: #94a3b8; margin-bottom: 8px; font-family: 'JetBrains Mono', monospace; }
+.input { width: 100%; padding: 12px 14px; background: #0a0e1a; border: 1px solid #334155; border-radius: 10px; color: #f1f5f9; font-size: 14px; outline: none; }
+.input:focus { border-color: #38bdf8; }
+.input-pin { letter-spacing: 8px; text-align: center; font-family: 'JetBrains Mono', monospace; font-weight: 800; font-size: 18px; }
+.muted-hint { font-size: 11px; color: #64748b; margin-top: 6px; }
+.warning-text { font-size: 11px; color: #facc15; margin-top: 8px; }
+
+.toggle-card { display: flex; align-items: center; gap: 12px; padding: 14px; background: #0f172a; border: 1px solid #1e293b; border-radius: 12px; margin-bottom: 16px; }
+.toggle-label-main { font-size: 13px; font-weight: 700; color: #f1f5f9; display: flex; align-items: center; gap: 4px; }
+.toggle-label-sub { font-size: 11px; color: #94a3b8; margin-top: 4px; }
+.toggle { width: 48px; height: 28px; border-radius: 14px; position: relative; transition: background 0.2s; flex-shrink: 0; background: #334155; }
+.toggle.active { background: #10b981; }
+.toggle-knob { position: absolute; top: 2px; left: 2px; width: 24px; height: 24px; background: #fff; border-radius: 50%; transition: transform 0.2s; }
+.toggle.active .toggle-knob { transform: translateX(20px); }
+
+.jugadores-list { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
+.jugador-row { display: flex; align-items: center; gap: 10px; padding: 10px 12px; background: #0f172a; border: 1px solid #1e293b; border-radius: 10px; }
+.yo-btn { width: 24px; height: 24px; border-radius: 50%; border: 2px solid #475569; background: #0a0e1a; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 12px; color: #0a0e1a; }
+.yo-btn.active { background: #38bdf8; border-color: #38bdf8; }
+.jugador-info { flex: 1; min-width: 0; }
+.jugador-name { font-size: 13px; font-weight: 600; color: #f1f5f9; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: flex; align-items: center; gap: 6px; }
+.yo-badge { font-size: 9px; background: #38bdf8; color: #0a0e1a; padding: 2px 6px; border-radius: 4px; font-family: 'JetBrains Mono', monospace; font-weight: 800; letter-spacing: 1px; }
+.jugador-plata { font-size: 11px; color: #10b981; font-weight: 700; margin-top: 2px; }
+.del-btn { width: 28px; height: 28px; border-radius: 6px; background: rgba(239, 68, 68, 0.1); color: #ef4444; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+
+.add-jugador { display: flex; gap: 8px; }
+.btn-add { width: 48px; background: #facc15; color: #0a0e1a; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 22px; }
+
+.pozo-preview { margin: 20px 0; padding: 16px; background: rgba(250, 204, 21, 0.08); border: 1px solid rgba(250, 204, 21, 0.3); border-radius: 12px; text-align: center; }
+.pozo-label { font-size: 10px; font-weight: 700; letter-spacing: 2px; color: #facc15; }
+.pozo-amount { font-family: 'Anton', sans-serif; font-size: 32px; color: #facc15; line-height: 1.1; }
+
+.btn-final { width: 100%; padding: 18px; background: linear-gradient(90deg, #38bdf8 0%, #facc15 100%); color: #0a0e1a; font-family: 'Anton', sans-serif; font-size: 18px; letter-spacing: 2px; border-radius: 14px; font-weight: 700; margin-top: 24px; }
+.btn-final:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.empty { padding: 40px 20px; display: flex; flex-direction: column; align-items: center; text-align: center; color: #94a3b8; gap: 12px; }
+
+/* ============ GRUPO ENCONTRADO ============ */
+.grupo-card { background: #0f172a; border: 1px solid #1e293b; border-radius: 12px; padding: 14px; margin-bottom: 10px; }
+.grupo-card-header { display: flex; align-items: center; gap: 10px; cursor: pointer; }
+.grupo-card-name { font-family: 'Anton', sans-serif; font-size: 18px; color: #f1f5f9; letter-spacing: 1px; }
+.grupo-card-meta { font-size: 11px; color: #94a3b8; margin-top: 4px; }
+.grupo-card-arrow { color: #facc15; }
+.grupo-expand { margin-top: 12px; padding-top: 12px; border-top: 1px dashed #334155; }
+.grupo-expand-title { font-size: 11px; color: #64748b; margin-bottom: 10px; letter-spacing: 1px; font-weight: 700; }
+.entrar-como-btn { display: flex; align-items: center; gap: 8px; padding: 10px 12px; background: #0a0e1a; border: 1px solid #1e293b; border-radius: 8px; color: #cbd5e1; font-size: 13px; font-weight: 600; width: 100%; text-align: left; margin-bottom: 6px; }
+
+/* ============ HEADER GRUPO ============ */
+.header { background: linear-gradient(135deg, #0a0e1a 0%, #1e293b 100%); border-bottom: 1px solid #1e293b; padding: 16px; position: sticky; top: 0; z-index: 10; }
+.header-top { display: flex; align-items: center; gap: 10px; }
+.header-info { flex: 1; min-width: 0; }
+.header-title-row { display: flex; align-items: center; gap: 6px; }
+.header-title { font-family: 'Anton', sans-serif; font-size: 18px; color: #f1f5f9; letter-spacing: 1px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.header-meta { font-size: 10px; color: #64748b; font-family: 'JetBrains Mono', monospace; letter-spacing: 1px; margin-top: 2px; }
+.user-chip { display: flex; align-items: center; gap: 6px; background: #1e293b; border: 1px solid #334155; padding: 8px 12px; border-radius: 20px; color: #cbd5e1; font-size: 12px; font-weight: 600; max-width: 130px; }
+.user-chip-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.exit-btn { width: 36px; height: 36px; border-radius: 8px; background: #1e293b; color: #94a3b8; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 16px; }
+.share-btn { width: 36px; height: 36px; border-radius: 8px; background: #1e293b; color: #facc15; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 16px; }
+
+/* ============ TABS ============ */
+.tabs { display: flex; background: #0a0e1a; border-bottom: 1px solid #1e293b; position: sticky; top: 73px; z-index: 9; }
+.tab { flex: 1; padding: 14px 8px; color: #64748b; display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 12px; font-weight: 700; letter-spacing: 1px; font-family: 'JetBrains Mono', monospace; border-bottom: 2px solid transparent; }
+.tab.active { color: #facc15; border-bottom-color: #facc15; }
+
+/* ============ PARTIDOS ============ */
+.main { padding-top: 8px; animation: fadeIn 0.3s; }
+.warning-box { margin: 12px 16px; padding: 12px; background: rgba(250, 204, 21, 0.1); border: 1px solid rgba(250, 204, 21, 0.3); border-radius: 10px; color: #facc15; font-size: 12px; font-weight: 600; }
+.grupos-bar { display: flex; gap: 6px; padding: 12px 16px 8px; }
+.grupo-chip { padding: 6px 14px; background: #1e293b; border: 1px solid #334155; border-radius: 16px; color: #94a3b8; font-size: 11px; font-weight: 700; font-family: 'JetBrains Mono', monospace; letter-spacing: 1px; flex-shrink: 0; }
+.grupo-chip.active { background: #facc15; color: #0a0e1a; border-color: #facc15; }
+.jornada-section { margin-bottom: 8px; }
+.jornada-header { padding: 14px 16px 8px; display: flex; align-items: baseline; gap: 8px; }
+.jornada-date { font-family: 'Anton', sans-serif; font-size: 18px; color: #facc15; letter-spacing: 1px; }
+.jornada-sep { color: #475569; }
+.jornada-sub { font-size: 10px; color: #64748b; font-weight: 700; letter-spacing: 1.5px; font-family: 'JetBrains Mono', monospace; }
+.partido-card { display: flex; width: calc(100% - 32px); margin: 0 16px 8px; background: #0f172a; border: 1px solid #1e293b; border-radius: 12px; overflow: hidden; text-align: left; }
+.partido-card:disabled { opacity: 0.6; cursor: not-allowed; }
+.partido-stripe { width: 4px; flex-shrink: 0; }
+.partido-content { flex: 1; padding: 12px 14px; min-width: 0; }
+.partido-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+.partido-badge { font-family: 'JetBrains Mono', monospace; font-size: 9px; font-weight: 800; letter-spacing: 1.5px; }
+.partido-hora { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #64748b; font-weight: 600; }
+.partido-main { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 10px; }
+.equipo { display: flex; align-items: center; gap: 6px; min-width: 0; }
+.equipo.away { justify-content: flex-end; }
+.bandera { font-size: 22px; flex-shrink: 0; }
+.equipo-nombre { font-size: 13px; font-weight: 600; color: #e2e8f0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.score-box { min-width: 60px; text-align: center; }
+.score-real { display: flex; align-items: center; justify-content: center; gap: 6px; font-family: 'JetBrains Mono', monospace; font-weight: 800; color: #facc15; font-size: 22px; }
+.score-real .sep { color: #facc15; opacity: 0.5; }
+.score-pron { display: flex; align-items: center; justify-content: center; gap: 6px; font-family: 'JetBrains Mono', monospace; font-weight: 700; color: #94a3b8; font-size: 18px; }
+.score-pron .sep { color: #475569; }
+.score-vacio { color: #475569; font-family: 'Anton', sans-serif; font-size: 20px; }
+.partido-footer { margin-top: 10px; padding-top: 10px; border-top: 1px dashed #1e293b; display: flex; justify-content: flex-end; }
+.puntos-badge { padding: 4px 10px; border-radius: 12px; font-size: 10px; font-weight: 800; letter-spacing: 1px; font-family: 'JetBrains Mono', monospace; }
+.sin-pron, .tu-pron, .pronosticar-label { font-size: 10px; font-weight: 700; letter-spacing: 1px; font-family: 'JetBrains Mono', monospace; }
+.sin-pron { color: #64748b; }
+.tu-pron { color: #10b981; }
+.pronosticar-label { color: #38bdf8; }
+
+/* ============ MODAL ============ */
+.modal-backdrop { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.85); display: flex; align-items: flex-end; justify-content: center; z-index: 100; animation: fadeIn 0.2s; }
+.modal { background: #0f172a; width: 100%; max-width: 480px; border-radius: 20px 20px 0 0; position: relative; overflow: hidden; animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1); border: 1px solid #1e293b; border-bottom: none; max-height: 90vh; overflow-y: auto; }
+.modal-stripe { height: 6px; width: 100%; }
+.modal-close { position: absolute; top: 16px; right: 16px; background: #1e293b; color: #cbd5e1; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 5; font-size: 16px; }
+.modal-header-block { padding: 20px 24px 12px; display: flex; flex-direction: column; }
+.modal-tagline { font-weight: 700; letter-spacing: 2px; font-size: 11px; }
+.modal-sub { color: #94a3b8; font-size: 12px; margin-top: 4px; }
+.locked-banner { margin: 0 24px 12px; padding: 10px 12px; background: rgba(250, 204, 21, 0.1); border: 1px solid rgba(250, 204, 21, 0.3); border-radius: 8px; color: #facc15; font-size: 10px; font-weight: 800; letter-spacing: 1px; font-family: 'JetBrains Mono', monospace; display: flex; align-items: center; gap: 6px; }
+.modal-equipos { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px 16px; gap: 8px; }
+.modal-equipo { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.modal-bandera { font-size: 48px; }
+.modal-equipo-nombre { font-size: 13px; font-weight: 700; color: #f1f5f9; text-align: center; min-height: 36px; display: flex; align-items: center; }
+.vs-big { font-family: 'Anton', sans-serif; font-size: 18px; color: #475569; letter-spacing: 1px; }
+.num-picker { display: flex; align-items: center; gap: 8px; }
+.num-btn { width: 36px; height: 36px; border-radius: 50%; background: #1e293b; color: #cbd5e1; font-size: 22px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+.num-btn:disabled { opacity: 0.3; }
+.num-display { width: 56px; height: 56px; border: 3px solid; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-family: 'JetBrains Mono', monospace; font-size: 28px; font-weight: 800; background: #0a0e1a; }
+.modal-reglas { margin: 8px 24px 16px; padding: 14px; background: #0a0e1a; border-radius: 10px; border: 1px solid #1e293b; }
+.regla-row { display: flex; align-items: center; gap: 10px; font-size: 12px; color: #cbd5e1; padding: 4px 0; }
+.regla-punto { width: 24px; height: 24px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800; font-family: 'JetBrains Mono', monospace; color: #0a0e1a; }
+.btn-guardar { width: calc(100% - 48px); margin: 0 24px 24px; padding: 16px; background: linear-gradient(90deg, #38bdf8 0%, #facc15 100%); color: #0a0e1a; font-family: 'Anton', sans-serif; font-size: 18px; letter-spacing: 2px; border-radius: 12px; font-weight: 700; }
+
+/* ============ TABLA ============ */
+.tabla-body { padding: 16px; }
+.pozo-box { background: linear-gradient(135deg, rgba(250, 204, 21, 0.08) 0%, rgba(56, 189, 248, 0.05) 100%); border: 1px solid rgba(250, 204, 21, 0.3); border-radius: 14px; padding: 16px; margin-bottom: 16px; }
+.pozo-box-inner { display: flex; align-items: center; gap: 8px; }
+.pozo-icon { font-size: 24px; }
+.pozo-info-label { font-size: 10px; font-weight: 700; letter-spacing: 2px; color: #94a3b8; }
+.pozo-info-amount { font-family: 'Anton', sans-serif; font-size: 28px; color: #facc15; letter-spacing: 1px; }
+.pozo-info-note { font-size: 10px; color: #64748b; margin-top: 8px; line-height: 1.5; }
+.tabla-header { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+.tabla-title { font-family: 'Anton', sans-serif; font-size: 24px; color: #facc15; letter-spacing: 2px; }
+.tabla-list { display: flex; flex-direction: column; gap: 8px; }
+.rank-row { display: flex; align-items: center; gap: 12px; padding: 12px 14px; background: #0f172a; border: 1px solid #1e293b; border-radius: 12px; }
+.rank-row.is-me { border-color: #38bdf8; background: rgba(56, 189, 248, 0.05); }
+.rank-row.is-first { border-color: #facc15; background: rgba(250, 204, 21, 0.05); }
+.rank-pos { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: 'Anton', sans-serif; font-size: 16px; font-weight: 700; flex-shrink: 0; background: #1e293b; color: #94a3b8; }
+.rank-pos.gold { background: #facc15; color: #0a0e1a; }
+.rank-pos.silver { background: #cbd5e1; color: #0a0e1a; }
+.rank-pos.bronze { background: #cd7f32; color: #0a0e1a; }
+.rank-info { flex: 1; min-width: 0; }
+.rank-nombre { font-size: 14px; font-weight: 700; color: #f1f5f9; display: flex; align-items: center; gap: 8px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.rank-you { font-size: 9px; background: #38bdf8; color: #0a0e1a; padding: 2px 6px; border-radius: 4px; font-family: 'JetBrains Mono', monospace; font-weight: 800; letter-spacing: 1px; }
+.rank-stats { display: flex; gap: 6px; font-size: 10px; color: #94a3b8; font-family: 'JetBrains Mono', monospace; font-weight: 600; margin-top: 2px; letter-spacing: 0.5px; }
+.rank-stats .dot { color: #475569; }
+.rank-reparto { font-size: 12px; margin-top: 4px; font-family: 'JetBrains Mono', monospace; }
+.rank-puntos { display: flex; flex-direction: column; align-items: flex-end; }
+.rank-puntos-num { font-family: 'Anton', sans-serif; font-size: 28px; color: #facc15; line-height: 1; }
+.rank-puntos-label { font-size: 9px; color: #64748b; font-weight: 700; letter-spacing: 1.5px; font-family: 'JetBrains Mono', monospace; }
+.leyenda { margin-top: 20px; padding: 12px; background: #0a0e1a; border-radius: 8px; text-align: center; color: #64748b; font-size: 11px; line-height: 1.6; }
+
+/* ============ ADMIN ============ */
+.admin-lock { padding: 40px 24px; display: flex; flex-direction: column; align-items: center; text-align: center; }
+.admin-lock-icon { font-size: 40px; color: #64748b; margin-bottom: 16px; }
+.admin-lock-title { color: #cbd5e1; margin-bottom: 8px; font-family: 'Anton', sans-serif; letter-spacing: 1px; font-size: 20px; }
+.admin-lock-text { color: #64748b; max-width: 280px; font-size: 13px; line-height: 1.5; }
+.btn-admin { margin-top: 24px; padding: 12px 28px; background: #facc15; color: #0a0e1a; font-family: 'Anton', sans-serif; font-size: 16px; letter-spacing: 2px; border-radius: 10px; font-weight: 700; }
+.admin-banner { margin: 8px 16px 12px; padding: 10px 14px; background: rgba(250, 204, 21, 0.1); border: 1px solid rgba(250, 204, 21, 0.3); border-radius: 10px; color: #facc15; display: flex; align-items: center; gap: 8px; letter-spacing: 1px; font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; }
+.admin-close-btn { background: #facc15; color: #0a0e1a; padding: 4px 10px; border-radius: 6px; font-size: 10px; font-weight: 800; letter-spacing: 1px; }
+.res-row { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid #1e293b; }
+.res-stripe { width: 4px; align-self: stretch; border-radius: 2px; }
+.res-info { flex: 1; min-width: 0; }
+.res-meta { font-size: 10px; font-weight: 700; letter-spacing: 1px; font-family: 'JetBrains Mono', monospace; }
+.res-teams { font-size: 12px; color: #cbd5e1; margin-top: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.res-score { background: #facc15; color: #0a0e1a; padding: 8px 14px; border-radius: 8px; font-family: 'JetBrains Mono', monospace; font-weight: 800; font-size: 14px; }
+.res-plus { background: #1e293b; color: #94a3b8; width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+.res-edit { display: flex; align-items: center; gap: 4px; }
+.res-input { width: 40px; padding: 6px; background: #0a0e1a; border: 1px solid #334155; border-radius: 6px; color: #facc15; font-family: 'JetBrains Mono', monospace; font-weight: 800; font-size: 14px; text-align: center; outline: none; }
+.res-ok { background: #10b981; color: #0a0e1a; width: 32px; height: 32px; border-radius: 6px; display: flex; align-items: center; justify-content: center; margin-left: 4px; font-size: 14px; }
+
+/* ============ MODAL JUGADORES ============ */
+.modal-pad { padding: 24px; }
+.modal-h2 { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+.modal-h2-title { display: flex; align-items: center; gap: 8px; }
+.modal-h2-text { font-family: 'Anton', sans-serif; font-size: 22px; color: #f1f5f9; letter-spacing: 1px; }
+.edit-btn { padding: 6px 12px; border-radius: 8px; font-size: 11px; font-weight: 800; letter-spacing: 1px; font-family: 'JetBrains Mono', monospace; display: flex; align-items: center; gap: 4px; background: #1e293b; color: #cbd5e1; }
+.edit-btn.active { background: #10b981; color: #0a0e1a; }
+.modal-sub-text { color: #94a3b8; font-size: 12px; margin-bottom: 16px; }
+.player-btn { display: flex; align-items: center; gap: 10px; padding: 12px 14px; background: #0a0e1a; border: 1px solid #1e293b; border-radius: 10px; color: #cbd5e1; margin-bottom: 8px; width: 100%; }
+.player-btn.is-me { border-color: #38bdf8; background: rgba(56, 189, 248, 0.1); }
+.player-btn-info { flex: 1; min-width: 0; text-align: left; }
+.player-btn-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 14px; font-weight: 600; }
+.player-btn-plata { font-size: 11px; color: #10b981; font-weight: 700; margin-top: 2px; }
+.add-section-label { font-size: 10px; color: #64748b; font-weight: 700; letter-spacing: 2px; margin-bottom: 8px; margin-top: 16px; font-family: 'JetBrains Mono', monospace; }
+
+/* ============ SHARE/TOAST ============ */
+.toast { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%); background: #10b981; color: #0a0e1a; padding: 12px 20px; border-radius: 10px; font-weight: 700; font-size: 13px; z-index: 200; box-shadow: 0 8px 24px rgba(0,0,0,0.4); }
+</style>
+</head>
+<body>
+
+<div id="app" x-data="prodeApp()" x-init="init()" x-cloak>
+
+  <!-- =================== LOADING =================== -->
+  <div class="loading" x-show="loading">
+    <div class="loading-ball">⚽</div>
+    <p class="loading-text">CARGANDO</p>
+  </div>
+
+  <!-- =================== INICIO =================== -->
+  <div class="inicio" x-show="!loading && pantalla === 'inicio'">
+    <div class="hero">
+      <h1 class="title">PRODE 26</h1>
+      <p class="subtitle">MUNDIAL · USA · MÉXICO · CANADÁ</p>
+      <div class="hero-badge">
+        <span>🔥</span>
+        <span>JUGÁ CON TUS AMIGOS</span>
+      </div>
+    </div>
+    <div class="inicio-botones">
+      <button class="btn-primary" @click="pantalla = 'crear'; resetForm()">
+        <span style="font-size: 20px;">＋</span>
+        <div class="btn-label">
+          <div class="btn-label-main">CREAR GRUPO</div>
+          <div class="btn-label-sub">Armar el prode con los pibes</div>
+        </div>
+      </button>
+      <button class="btn-secondary" @click="pantalla = 'buscar'; busqueda = ''; resultadosBusqueda = []; yaBusque = false">
+        <span style="font-size: 20px;">🔍</span>
+        <div class="btn-label">
+          <div class="btn-label-main">BUSCAR GRUPO</div>
+          <div class="btn-label-sub">Entrar a un grupo existente</div>
+        </div>
+      </button>
+    </div>
+  </div>
+
+  <!-- =================== BUSCAR GRUPO =================== -->
+  <div class="form-container" x-show="!loading && pantalla === 'buscar'">
+    <header class="form-header">
+      <button class="back-btn" @click="pantalla = 'inicio'">←</button>
+      <h2 class="form-title">BUSCAR GRUPO</h2>
+    </header>
+    <div class="form-body">
+      <div class="input-group">
+        <label class="label">NOMBRE DEL GRUPO</label>
+        <div style="display: flex; gap: 8px;">
+          <input type="text" class="input" x-model="busqueda" @keydown.enter="buscarGrupo()" placeholder="Ej: Asado Sábado" style="flex: 1;">
+          <button class="btn-add" @click="buscarGrupo()">🔍</button>
+        </div>
+      </div>
+
+      <p x-show="buscando" style="color: #64748b; text-align: center;">Buscando...</p>
+
+      <div class="empty" x-show="!buscando && yaBusque && resultadosBusqueda.length === 0">
+        <p>No se encontró ningún grupo con ese nombre.</p>
+        <button class="btn-primary" @click="pantalla = 'crear'; resetForm(); nombreGrupo = busqueda" style="margin-top: 8px;">
+          <span>＋</span>
+          <div class="btn-label-main">CREAR UNO NUEVO</div>
+        </button>
+      </div>
+
+      <template x-for="g in resultadosBusqueda" :key="g.id">
+        <div class="grupo-card">
+          <div class="grupo-card-header" @click="g._expanded = !g._expanded">
+            <div style="flex: 1; min-width: 0;">
+              <div class="grupo-card-name" x-text="g.nombre"></div>
+              <div class="grupo-card-meta">
+                <span x-text="g.jugadores.length + ' jugadores'"></span>
+                <template x-if="g.conPlata">
+                  <span> · Pozo: <span x-text="fmtPlata(totalPozoGrupo(g))"></span></span>
+                </template>
+              </div>
+            </div>
+            <div class="grupo-card-arrow" x-text="g._expanded ? '▲' : '▼'"></div>
+          </div>
+          <div class="grupo-expand" x-show="g._expanded">
+            <p class="grupo-expand-title">¿QUIÉN SOS?</p>
+            <template x-for="j in g.jugadores" :key="j.nombre">
+              <button class="entrar-como-btn" @click="intentarEntrar(g, j.nombre)">
+                <span>👤</span>
+                <span style="flex: 1;" x-text="j.nombre"></span>
+                <template x-if="g.conPlata">
+                  <span style="font-size: 11px; color: #10b981; font-weight: 700;" x-text="fmtPlata(j.plata)"></span>
+                </template>
+              </button>
+            </template>
+          </div>
+        </div>
+      </template>
+    </div>
+  </div>
+
+  <!-- =================== CREAR GRUPO =================== -->
+  <div class="form-container" x-show="!loading && pantalla === 'crear'">
+    <header class="form-header">
+      <button class="back-btn" @click="pantalla = 'inicio'">←</button>
+      <h2 class="form-title">NUEVO GRUPO</h2>
+    </header>
+    <div class="form-body">
+      <div class="input-group">
+        <label class="label">NOMBRE DEL GRUPO</label>
+        <input type="text" class="input" x-model="nombreGrupo" placeholder="Ej: Asado Sábado" maxlength="40">
+      </div>
+
+      <div class="input-group">
+        <label class="label">PIN DEL GRUPO (4 DÍGITOS)</label>
+        <input type="tel" inputmode="numeric" pattern="[0-9]*" class="input input-pin" x-model="pinGrupo" placeholder="0000" maxlength="4">
+        <p class="muted-hint">Compartí este PIN con los pibes para que puedan entrar al grupo.</p>
+      </div>
+
+      <div class="toggle-card">
+        <div style="flex: 1;">
+          <div class="toggle-label-main"><span>💰</span> JUGAR POR PLATA</div>
+          <div class="toggle-label-sub">Si lo activás, podés definir cuánto pone cada uno</div>
+        </div>
+        <button class="toggle" :class="{ active: conPlata }" @click="conPlata = !conPlata">
+          <div class="toggle-knob"></div>
+        </button>
+      </div>
+
+      <div class="input-group" x-show="conPlata">
+        <label class="label">ENTRADA SUGERIDA (ARS)</label>
+        <input type="number" class="input" x-model="montoEntrada" placeholder="10000" min="0">
+        <p class="muted-hint">Cada jugador puede poner un monto distinto al sumarlo.</p>
+      </div>
+
+      <div style="margin-top: 24px;">
+        <label class="label">JUGADORES (<span x-text="jugadoresForm.length"></span>)</label>
+
+        <div class="jugadores-list" x-show="jugadoresForm.length > 0">
+          <template x-for="(j, idx) in jugadoresForm" :key="j.nombre">
+            <div class="jugador-row">
+              <button class="yo-btn" :class="{ active: yo === j.nombre }" @click="yo = j.nombre" title="Marcar como yo">
+                <span x-show="yo === j.nombre">✓</span>
+              </button>
+              <div class="jugador-info">
+                <div class="jugador-name">
+                  <span x-text="j.nombre"></span>
+                  <span class="yo-badge" x-show="yo === j.nombre">YO</span>
+                </div>
+                <div class="jugador-plata" x-show="conPlata" x-text="fmtPlata(j.plata)"></div>
+              </div>
+              <button class="del-btn" @click="quitarJugadorForm(j.nombre)">🗑</button>
+            </div>
+          </template>
+        </div>
+
+        <div class="add-jugador">
+          <input type="text" class="input" x-model="nuevoJugador" @keydown.enter="!conPlata && agregarJugadorForm()" placeholder="Nombre" style="flex: 1;" maxlength="20">
+          <input type="number" class="input" x-show="conPlata" x-model="montoJugador" @keydown.enter="agregarJugadorForm()" :placeholder="montoEntrada || '$'" style="width: 90px;" min="0">
+          <button class="btn-add" @click="agregarJugadorForm()">＋</button>
+        </div>
+
+        <p class="warning-text" x-show="jugadoresForm.length > 0 && !yo">
+          ⚠️ Marcá cuál de los jugadores sos vos (tocá el círculo de la izquierda)
+        </p>
+      </div>
+
+      <div class="pozo-preview" x-show="conPlata && jugadoresForm.length > 0">
+        <div class="pozo-label">POZO TOTAL</div>
+        <div class="pozo-amount" x-text="fmtPlata(pozoForm)"></div>
+      </div>
+
+      <button class="btn-final" @click="crearGrupo()" :disabled="!puedeCrear">
+        CREAR GRUPO Y EMPEZAR
+      </button>
+    </div>
+  </div>
+
+  <!-- =================== INGRESAR PIN =================== -->
+  <div class="modal-backdrop" x-show="pidiendoPin" @click.self="pidiendoPin = false; pinIngreso = ''">
+    <div class="modal" style="max-width: 400px;">
+      <div class="modal-pad">
+        <h2 class="modal-h2-text" style="margin-bottom: 8px;">PIN DEL GRUPO</h2>
+        <p class="modal-sub-text">
+          Pedile a quien creó el grupo el PIN de 4 dígitos para entrar.
+        </p>
+        <input type="tel" inputmode="numeric" pattern="[0-9]*" class="input input-pin" x-model="pinIngreso" @keydown.enter="confirmarPin()" placeholder="0000" maxlength="4" autofocus>
+        <p class="warning-text" x-show="pinError" x-text="pinError"></p>
+        <div style="display: flex; gap: 8px; margin-top: 16px;">
+          <button class="btn-secondary" @click="pidiendoPin = false; pinIngreso = ''" style="flex: 1; justify-content: center; padding: 14px;">
+            <span style="font-family: 'Anton', sans-serif; letter-spacing: 1px;">CANCELAR</span>
+          </button>
+          <button class="btn-final" @click="confirmarPin()" style="flex: 1; margin-top: 0; padding: 14px; font-size: 16px;">
+            ENTRAR
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =================== GRUPO ACTIVO =================== -->
+  <template x-if="!loading && pantalla === 'grupo' && grupoActual">
+  <div>
+    <header class="header">
+      <div class="header-top">
+        <div class="header-info">
+          <div class="header-title-row">
+            <span style="color: #facc15;">🏆</span>
+            <span class="header-title" x-text="grupoActual.nombre"></span>
+          </div>
+          <div class="header-meta">
+            <span x-text="grupoActual.jugadores.length + ' JUGADORES'"></span>
+            <template x-if="grupoActual.conPlata">
+              <span> · POZO <span x-text="fmtPlata(totalPozo)"></span></span>
+            </template>
+          </div>
+        </div>
+        <button class="share-btn" @click="compartirGrupo()" title="Compartir">📤</button>
+        <button class="user-chip" @click="showJugadores = true">
+          <span>👤</span>
+          <span class="user-chip-name" x-text="jugadorActual || 'Elegir'"></span>
+        </button>
+        <button class="exit-btn" @click="salirGrupo()" title="Salir">⤴</button>
+      </div>
+    </header>
+
+    <nav class="tabs">
+      <button class="tab" :class="{ active: vista === 'partidos' }" @click="vista = 'partidos'">📅 Partidos</button>
+      <button class="tab" :class="{ active: vista === 'tabla' }" @click="vista = 'tabla'">🏆 Tabla</button>
+      <button class="tab" :class="{ active: vista === 'admin' }" @click="vista = 'admin'">✏️ Resultados</button>
+    </nav>
+
+    <main class="main">
+      <!-- =================== TAB PARTIDOS =================== -->
+      <div x-show="vista === 'partidos'">
+        <div class="grupos-bar scrollX">
+          <button class="grupo-chip" :class="{ active: filtroGrupo === 'TODOS' }" @click="filtroGrupo = 'TODOS'">TODOS</button>
+          <template x-for="g in gruposKeys" :key="g">
+            <button class="grupo-chip"
+                    :class="{ active: filtroGrupo === g }"
+                    :style="filtroGrupo === g ? `background: ${grupoColor(g)}; color: #0a0e1a; border-color: ${grupoColor(g)};` : ''"
+                    @click="filtroGrupo = g"
+                    x-text="'GR. ' + g"></button>
+          </template>
+        </div>
+
+        <div class="warning-box" x-show="!jugadorActual">
+          ⚠️ Elegí quién sos para empezar a pronosticar
+        </div>
+
+        <template x-for="[fecha, ps] in partidosPorJornada" :key="fecha">
+          <div class="jornada-section">
+            <div class="jornada-header">
+              <span class="jornada-date" x-text="fecha"></span>
+              <span class="jornada-sep">·</span>
+              <span class="jornada-sub" x-text="ps.length + ' partidos'"></span>
+            </div>
+            <template x-for="p in ps" :key="p.id">
+              <button class="partido-card" :disabled="!jugadorActual" @click="abrirPartido(p)">
+                <div class="partido-stripe" :style="`background: ${grupoColor(p.g)}`"></div>
+                <div class="partido-content">
+                  <div class="partido-top">
+                    <span class="partido-badge" :style="`color: ${grupoColor(p.g)}`" x-text="'GR. ' + p.g + ' · J' + p.j"></span>
+                    <span class="partido-hora" x-text="p.t"></span>
+                  </div>
+                  <div class="partido-main">
+                    <div class="equipo">
+                      <span class="bandera" x-text="bandera(p.h)"></span>
+                      <span class="equipo-nombre" x-text="p.h"></span>
+                    </div>
+                    <div class="score-box">
+                      <template x-if="resultados[p.id]">
+                        <div class="score-real">
+                          <span x-text="resultados[p.id].h"></span>
+                          <span class="sep">·</span>
+                          <span x-text="resultados[p.id].a"></span>
+                        </div>
+                      </template>
+                      <template x-if="!resultados[p.id] && pronosticos[p.id]">
+                        <div class="score-pron">
+                          <span x-text="pronosticos[p.id].h"></span>
+                          <span class="sep">·</span>
+                          <span x-text="pronosticos[p.id].a"></span>
+                        </div>
+                      </template>
+                      <template x-if="!resultados[p.id] && !pronosticos[p.id]">
+                        <div class="score-vacio">VS</div>
+                      </template>
+                    </div>
+                    <div class="equipo away">
+                      <span class="equipo-nombre" x-text="p.a"></span>
+                      <span class="bandera" x-text="bandera(p.a)"></span>
+                    </div>
+                  </div>
+                  <div class="partido-footer">
+                    <template x-if="resultados[p.id] && pronosticos[p.id]">
+                      <span class="puntos-badge"
+                            :style="badgeStyle(puntosPartido(p.id))"
+                            x-text="textoPuntos(puntosPartido(p.id))"></span>
+                    </template>
+                    <template x-if="resultados[p.id] && !pronosticos[p.id]">
+                      <span class="sin-pron">SIN PRONÓSTICO</span>
+                    </template>
+                    <template x-if="!resultados[p.id] && pronosticos[p.id]">
+                      <span class="tu-pron">TU PRONÓSTICO ✓</span>
+                    </template>
+                    <template x-if="!resultados[p.id] && !pronosticos[p.id] && jugadorActual">
+                      <span class="pronosticar-label">TOCÁ PARA PRONOSTICAR →</span>
+                    </template>
+                  </div>
+                </div>
+              </button>
+            </template>
+          </div>
+        </template>
+      </div>
+
+      <!-- =================== TAB TABLA =================== -->
+      <div x-show="vista === 'tabla'" class="tabla-body">
+        <div class="empty" x-show="ranking.length === 0">
+          <div style="font-size: 48px; color: #475569;">🏆</div>
+          <p>Aún no hay datos</p>
+        </div>
+
+        <div x-show="ranking.length > 0">
+          <div class="pozo-box" x-show="grupoActual.conPlata && totalPozo > 0">
+            <div class="pozo-box-inner">
+              <span class="pozo-icon">💰</span>
+              <div>
+                <div class="pozo-info-label">POZO TOTAL</div>
+                <div class="pozo-info-amount" x-text="fmtPlata(totalPozo)"></div>
+              </div>
+            </div>
+            <div class="pozo-info-note">Se reparte proporcional a los puntos de cada jugador.</div>
+          </div>
+
+          <div class="tabla-header">
+            <span style="font-size: 20px;">🏆</span>
+            <h2 class="tabla-title">RANKING</h2>
+          </div>
+
+          <div class="tabla-list">
+            <template x-for="(r, i) in ranking" :key="r.nombre">
+              <div class="rank-row"
+                   :class="{ 'is-me': r.nombre === jugadorActual, 'is-first': i === 0 && r.puntos > 0 }">
+                <div class="rank-pos"
+                     :class="{
+                       'gold': i === 0 && r.puntos > 0,
+                       'silver': i === 1 && r.puntos > 0,
+                       'bronze': i === 2 && r.puntos > 0
+                     }">
+                  <span x-text="i === 0 && r.puntos > 0 ? '👑' : (i + 1)"></span>
+                </div>
+                <div class="rank-info">
+                  <div class="rank-nombre">
+                    <span x-text="r.nombre"></span>
+                    <span class="rank-you" x-show="r.nombre === jugadorActual">VOS</span>
+                  </div>
+                  <div class="rank-stats">
+                    <span x-text="r.exactos + ' ★'"></span>
+                    <span class="dot">·</span>
+                    <span x-text="r.ganadores + ' ✓'"></span>
+                    <span class="dot">·</span>
+                    <span x-text="r.jugados + ' jug.'"></span>
+                  </div>
+                  <div class="rank-reparto" x-show="grupoActual.conPlata && totalPozo > 0">
+                    <span :style="repartoStyle(r)" x-text="fmtPlata(repartos[r.nombre] || 0)"></span>
+                    <span x-show="(r.plata || 0) > 0" style="color: #64748b; font-size: 10px; margin-left: 6px;"
+                          x-text="'(' + (gananciaJugador(r) >= 0 ? '+' : '') + fmtPlata(gananciaJugador(r)) + ')'"></span>
+                  </div>
+                </div>
+                <div class="rank-puntos">
+                  <span class="rank-puntos-num" x-text="r.puntos"></span>
+                  <span class="rank-puntos-label">PTS</span>
+                </div>
+              </div>
+            </template>
+          </div>
+
+          <div class="leyenda" x-show="grupoActual.conPlata && totalPozo > 0">
+            💰 El pozo se reparte en proporción a los puntos. Si nadie sumó puntos todavía, no se muestra reparto.
+          </div>
+        </div>
+      </div>
+
+      <!-- =================== TAB ADMIN =================== -->
+      <div x-show="vista === 'admin'">
+        <div class="admin-lock" x-show="!adminMode">
+          <div class="admin-lock-icon">✏️</div>
+          <h3 class="admin-lock-title">MODO ÁRBITRO</h3>
+          <p class="admin-lock-text">
+            Acá se cargan los resultados oficiales después de cada partido. Una vez cargado, los pronósticos quedan bloqueados.
+          </p>
+          <button class="btn-admin" @click="adminMode = true">ACTIVAR</button>
+        </div>
+
+        <div x-show="adminMode">
+          <div class="admin-banner">
+            <span>✏️</span>
+            <span style="flex: 1;">MODO ÁRBITRO ACTIVO</span>
+            <button class="admin-close-btn" @click="adminMode = false">SALIR</button>
+          </div>
+
+          <div class="grupos-bar scrollX">
+            <button class="grupo-chip" :class="{ active: filtroAdmin === 'TODOS' }" @click="filtroAdmin = 'TODOS'">TODOS</button>
+            <template x-for="g in gruposKeys" :key="g">
+              <button class="grupo-chip"
+                      :class="{ active: filtroAdmin === g }"
+                      :style="filtroAdmin === g ? `background: ${grupoColor(g)}; color: #0a0e1a; border-color: ${grupoColor(g)};` : ''"
+                      @click="filtroAdmin = g"
+                      x-text="'GR. ' + g"></button>
+            </template>
+          </div>
+
+          <div style="padding: 0 16px;">
+            <template x-for="p in partidosAdmin" :key="p.id">
+              <div class="res-row">
+                <div class="res-stripe" :style="`background: ${grupoColor(p.g)}`"></div>
+                <div class="res-info">
+                  <div class="res-meta" :style="`color: ${grupoColor(p.g)}`"
+                       x-text="'GR.' + p.g + ' · J' + p.j + ' · ' + p.d"></div>
+                  <div class="res-teams">
+                    <span x-text="bandera(p.h)"></span> <span x-text="p.h"></span>
+                    <span style="color: #475569;"> vs </span>
+                    <span x-text="p.a"></span> <span x-text="bandera(p.a)"></span>
+                  </div>
+                </div>
+                <template x-if="!editingId || editingId !== p.id">
+                  <template x-if="resultados[p.id]">
+                    <button class="res-score" @click="startEditRes(p.id)"
+                            x-text="resultados[p.id].h + ' · ' + resultados[p.id].a"></button>
+                  </template>
+                </template>
+                <template x-if="!editingId || editingId !== p.id">
+                  <template x-if="!resultados[p.id]">
+                    <button class="res-plus" @click="startEditRes(p.id)">＋</button>
+                  </template>
+                </template>
+                <template x-if="editingId === p.id">
+                  <div class="res-edit">
+                    <input type="number" class="res-input" x-model.number="editH" min="0" max="15">
+                    <span style="color: #64748b;">·</span>
+                    <input type="number" class="res-input" x-model.number="editA" min="0" max="15">
+                    <button class="res-ok" @click="guardarResultado(p.id, editH, editA); editingId = null">✓</button>
+                  </div>
+                </template>
+              </div>
+            </template>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+  </template>
+
+  <!-- =================== MODAL PRONOSTICO =================== -->
+  <div class="modal-backdrop" x-show="partidoActivo" @click.self="partidoActivo = null">
+    <div class="modal" x-show="partidoActivo" x-data="{ h: 1, a: 1 }" x-init="$watch('partidoActivo', p => { if(p) { h = pronosticos[p.id]?.h ?? 1; a = pronosticos[p.id]?.a ?? 1; } })">
+      <template x-if="partidoActivo">
+        <div>
+          <button class="modal-close" @click="partidoActivo = null">✕</button>
+          <div class="modal-stripe" :style="`background: ${grupoColor(partidoActivo.g)}`"></div>
+          <div class="modal-header-block">
+            <span class="modal-tagline" :style="`color: ${grupoColor(partidoActivo.g)}`"
+                  x-text="'GRUPO ' + partidoActivo.g + ' · JORNADA ' + partidoActivo.j"></span>
+            <span class="modal-sub" x-text="partidoActivo.d + ' · ' + partidoActivo.t + 'hs'"></span>
+          </div>
+
+          <div class="locked-banner" x-show="resultados[partidoActivo.id]">
+            🔒 RESULTADO OFICIAL · BLOQUEADO
+          </div>
+
+          <div class="modal-equipos">
+            <div class="modal-equipo">
+              <div class="modal-bandera" x-text="bandera(partidoActivo.h)"></div>
+              <div class="modal-equipo-nombre" x-text="partidoActivo.h"></div>
+              <div class="num-picker">
+                <button class="num-btn" :disabled="resultados[partidoActivo.id] || h === 0" @click="h = Math.max(0, h - 1)">−</button>
+                <div class="num-display" :style="`border-color: ${grupoColor(partidoActivo.g)}; color: ${grupoColor(partidoActivo.g)}`" x-text="h"></div>
+                <button class="num-btn" :disabled="resultados[partidoActivo.id]" @click="h = Math.min(15, h + 1)">+</button>
+              </div>
+            </div>
+            <div class="vs-big">VS</div>
+            <div class="modal-equipo">
+              <div class="modal-bandera" x-text="bandera(partidoActivo.a)"></div>
+              <div class="modal-equipo-nombre" x-text="partidoActivo.a"></div>
+              <div class="num-picker">
+                <button class="num-btn" :disabled="resultados[partidoActivo.id] || a === 0" @click="a = Math.max(0, a - 1)">−</button>
+                <div class="num-display" :style="`border-color: ${grupoColor(partidoActivo.g)}; color: ${grupoColor(partidoActivo.g)}`" x-text="a"></div>
+                <button class="num-btn" :disabled="resultados[partidoActivo.id]" @click="a = Math.min(15, a + 1)">+</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="modal-reglas">
+            <div class="regla-row">
+              <span class="regla-punto" style="background: #facc15;">5</span>
+              <span>Resultado exacto</span>
+            </div>
+            <div class="regla-row">
+              <span class="regla-punto" style="background: #10b981;">3</span>
+              <span>Ganador + diferencia exacta</span>
+            </div>
+            <div class="regla-row">
+              <span class="regla-punto" style="background: #0ea5e9;">2</span>
+              <span>Acertar ganador o empate</span>
+            </div>
+          </div>
+
+          <button class="btn-guardar" x-show="!resultados[partidoActivo.id]" @click="guardarPronostico(partidoActivo.id, h, a)">
+            GUARDAR PRONÓSTICO
+          </button>
+        </div>
+      </template>
+    </div>
+  </div>
+
+  <!-- =================== MODAL JUGADORES =================== -->
+  <div class="modal-backdrop" x-show="showJugadores" @click.self="jugadorActual && (showJugadores = false)">
+    <div class="modal" x-show="showJugadores">
+      <button class="modal-close" x-show="jugadorActual" @click="showJugadores = false">✕</button>
+      <div class="modal-pad" x-show="grupoActual">
+        <div class="modal-h2">
+          <div class="modal-h2-title">
+            <span style="font-size: 20px; color: #facc15;">👥</span>
+            <h2 class="modal-h2-text">JUGADORES</h2>
+          </div>
+          <button class="edit-btn" :class="{ active: editandoJugadores }" @click="editandoJugadores ? guardarJugadores() : (editandoJugadores = true)">
+            <template x-if="!editandoJugadores"><span>✏️ EDITAR</span></template>
+            <template x-if="editandoJugadores"><span>✓ GUARDAR</span></template>
+          </button>
+        </div>
+
+        <p class="modal-sub-text" x-show="!editandoJugadores">Tocá un jugador para entrar como ese.</p>
+
+        <div>
+          <template x-for="j in (editandoJugadores ? jugadoresEditar : grupoActual.jugadores)" :key="j.nombre">
+            <div class="player-btn" :class="{ 'is-me': j.nombre === jugadorActual }">
+              <span>👤</span>
+              <button class="player-btn-info"
+                      :disabled="editandoJugadores"
+                      @click="!editandoJugadores && cambiarJugadorActual(j.nombre)">
+                <div class="player-btn-name" x-text="j.nombre"></div>
+                <div class="player-btn-plata" x-show="grupoActual.conPlata" x-text="fmtPlata(j.plata)"></div>
+              </button>
+              <span x-show="j.nombre === jugadorActual && !editandoJugadores" style="color: #38bdf8;">✓</span>
+              <button class="del-btn" x-show="editandoJugadores" @click="quitarJugadorGrupo(j.nombre)">🗑</button>
+            </div>
+          </template>
+        </div>
+
+        <div x-show="editandoJugadores">
+          <div class="add-section-label">AGREGAR</div>
+          <div style="display: flex; gap: 8px;">
+            <input type="text" class="input" x-model="nuevoJugadorEdit" @keydown.enter="!grupoActual.conPlata && agregarJugadorGrupo()" placeholder="Nombre" style="flex: 1;" maxlength="20">
+            <input type="number" class="input" x-show="grupoActual.conPlata" x-model="montoJugadorEdit" @keydown.enter="agregarJugadorGrupo()" :placeholder="String(grupoActual.montoEntrada || '$')" style="width: 90px;">
+            <button class="btn-add" @click="agregarJugadorGrupo()">＋</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =================== TOAST =================== -->
+  <div class="toast" x-show="toast" x-text="toast"></div>
+
+</div>
+
+<!-- ============ FIREBASE ============ -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
+
+<!-- ============ ALPINE ============ -->
+<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+<script>
+// =================== FIREBASE CONFIG ===================
+const firebaseConfig = {
+  apiKey: "AIzaSyALCnTIrEpKkmDiQIWpQF54VryR38F74wU",
+  authDomain: "prode-mundial-2026-fa857.firebaseapp.com",
+  databaseURL: "https://prode-mundial-2026-fa857-default-rtdb.firebaseio.com",
+  projectId: "prode-mundial-2026-fa857",
+  storageBucket: "prode-mundial-2026-fa857.firebasestorage.app",
+  messagingSenderId: "345346225072",
+  appId: "1:345346225072:web:21733614861cfdad0f9c75"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+
+// =================== DATOS DEL MUNDIAL ===================
+const GRUPOS_MUNDIAL = {
+  A: { teams: ['México', 'Sudáfrica', 'Corea del Sur', 'Rep. Checa'], color: '#10b981' },
+  B: { teams: ['Canadá', 'Bosnia', 'Suiza', 'Catar'], color: '#ef4444' },
+  C: { teams: ['Brasil', 'Marruecos', 'Escocia', 'Haití'], color: '#facc15' },
+  D: { teams: ['Estados Unidos', 'Paraguay', 'Australia', 'Turquía'], color: '#3b82f6' },
+  E: { teams: ['Alemania', 'Costa de Marfil', 'Ecuador', 'Curazao'], color: '#a3a3a3' },
+  F: { teams: ['Países Bajos', 'Japón', 'Suecia', 'Túnez'], color: '#f97316' },
+  G: { teams: ['Bélgica', 'Egipto', 'Irán', 'Nueva Zelanda'], color: '#dc2626' },
+  H: { teams: ['España', 'Cabo Verde', 'Arabia Saudita', 'Uruguay'], color: '#eab308' },
+  I: { teams: ['Francia', 'Senegal', 'Noruega', 'Irak'], color: '#6366f1' },
+  J: { teams: ['Argentina', 'Argelia', 'Austria', 'Jordania'], color: '#38bdf8' },
+  K: { teams: ['Portugal', 'Colombia', 'Uzbekistán', 'RD Congo'], color: '#16a34a' },
+  L: { teams: ['Inglaterra', 'Croacia', 'Ghana', 'Panamá'], color: '#e11d48' }
+};
+
+const BANDERAS = {
+  'México': '🇲🇽', 'Sudáfrica': '🇿🇦', 'Corea del Sur': '🇰🇷', 'Rep. Checa': '🇨🇿',
+  'Canadá': '🇨🇦', 'Bosnia': '🇧🇦', 'Suiza': '🇨🇭', 'Catar': '🇶🇦',
+  'Brasil': '🇧🇷', 'Marruecos': '🇲🇦', 'Escocia': '🏴󠁧󠁢󠁳󠁣󠁴󠁿', 'Haití': '🇭🇹',
+  'Estados Unidos': '🇺🇸', 'Paraguay': '🇵🇾', 'Australia': '🇦🇺', 'Turquía': '🇹🇷',
+  'Alemania': '🇩🇪', 'Costa de Marfil': '🇨🇮', 'Ecuador': '🇪🇨', 'Curazao': '🇨🇼',
+  'Países Bajos': '🇳🇱', 'Japón': '🇯🇵', 'Suecia': '🇸🇪', 'Túnez': '🇹🇳',
+  'Bélgica': '🇧🇪', 'Egipto': '🇪🇬', 'Irán': '🇮🇷', 'Nueva Zelanda': '🇳🇿',
+  'España': '🇪🇸', 'Cabo Verde': '🇨🇻', 'Arabia Saudita': '🇸🇦', 'Uruguay': '🇺🇾',
+  'Francia': '🇫🇷', 'Senegal': '🇸🇳', 'Noruega': '🇳🇴', 'Irak': '🇮🇶',
+  'Argentina': '🇦🇷', 'Argelia': '🇩🇿', 'Austria': '🇦🇹', 'Jordania': '🇯🇴',
+  'Portugal': '🇵🇹', 'Colombia': '🇨🇴', 'Uzbekistán': '🇺🇿', 'RD Congo': '🇨🇩',
+  'Inglaterra': '🏴󠁧󠁢󠁥󠁮󠁧󠁿', 'Croacia': '🇭🇷', 'Ghana': '🇬🇭', 'Panamá': '🇵🇦'
+};
+
+function generarFixture() {
+  const fechas = {
+    A: ['11/06', '18/06', '24/06'], B: ['12/06', '18/06', '24/06'],
+    C: ['13/06', '19/06', '25/06'], D: ['12/06', '19/06', '25/06'],
+    E: ['14/06', '20/06', '25/06'], F: ['14/06', '20/06', '25/06'],
+    G: ['15/06', '21/06', '26/06'], H: ['15/06', '21/06', '26/06'],
+    I: ['16/06', '22/06', '26/06'], J: ['16/06', '22/06', '27/06'],
+    K: ['17/06', '23/06', '27/06'], L: ['17/06', '23/06', '27/06']
+  };
+  const horas = ['14:00', '17:00', '20:00', '23:00'];
+  const partidos = [];
+  Object.entries(GRUPOS_MUNDIAL).forEach(([g, { teams }]) => {
+    const [t1, t2, t3, t4] = teams;
+    const matches = [
+      { j: 1, h: t1, a: t2 }, { j: 1, h: t3, a: t4 },
+      { j: 2, h: t1, a: t3 }, { j: 2, h: t4, a: t2 },
+      { j: 3, h: t4, a: t1 }, { j: 3, h: t2, a: t3 }
+    ];
+    matches.forEach((m, i) => {
+      partidos.push({
+        id: `${g}${i + 1}`, g, j: m.j, h: m.h, a: m.a,
+        d: fechas[g][m.j - 1], t: horas[i % horas.length]
+      });
+    });
+  });
+  return partidos;
+}
+
+const PARTIDOS = generarFixture();
+
+function calcularPuntos(pron, real) {
+  if (!pron || !real || real.h === '' || real.a === '') return 0;
+  const pH = parseInt(pron.h), pA = parseInt(pron.a);
+  const rH = parseInt(real.h), rA = parseInt(real.a);
+  if (isNaN(pH) || isNaN(pA) || isNaN(rH) || isNaN(rA)) return 0;
+  if (pH === rH && pA === rA) return 5;
+  const sigP = Math.sign(pH - pA);
+  const sigR = Math.sign(rH - rA);
+  if (sigP === sigR) {
+    if ((pH - pA) === (rH - rA)) return 3;
+    return 2;
+  }
+  return 0;
+}
+
+// =================== ALPINE APP ===================
+function prodeApp() {
+  return {
+    loading: true,
+    pantalla: 'inicio',
+    grupoActual: null,
+    jugadorActual: null,
+    vista: 'partidos',
+    filtroGrupo: 'TODOS',
+    filtroAdmin: 'TODOS',
+    partidoActivo: null,
+    showJugadores: false,
+    adminMode: false,
+    editandoJugadores: false,
+    jugadoresEditar: [],
+    pronosticos: {},
+    todosPronosticos: {},
+    resultados: {},
+    nombreGrupo: '',
+    montoEntrada: '',
+    conPlata: false,
+    jugadoresForm: [],
+    nuevoJugador: '',
+    montoJugador: '',
+    yo: '',
+    pinGrupo: '',
+    busqueda: '',
+    resultadosBusqueda: [],
+    yaBusque: false,
+    buscando: false,
+    pidiendoPin: false,
+    pinIngreso: '',
+    pinError: '',
+    grupoParaEntrar: null,
+    jugadorParaEntrar: null,
+    nuevoJugadorEdit: '',
+    montoJugadorEdit: '',
+    editingId: null,
+    editH: 0,
+    editA: 0,
+    toast: '',
+    listenerRefs: [],
+
+    gruposKeys: Object.keys(GRUPOS_MUNDIAL),
+
+    async init() {
+      const params = new URLSearchParams(window.location.search);
+      const groupIdFromUrl = params.get('g');
+
+      if (groupIdFromUrl) {
+        try {
+          const snap = await db.ref(`grupos/${groupIdFromUrl}`).once('value');
+          if (snap.exists()) {
+            const grupo = snap.val();
+            grupo.id = groupIdFromUrl;
+            grupo.jugadores = grupo.jugadores || [];
+            this.grupoParaEntrar = grupo;
+            this.jugadorParaEntrar = null;
+            this.pidiendoPin = true;
+            this.loading = false;
+            return;
+          }
+        } catch (e) { console.error(e); }
+      }
+
+      const lastGroup = localStorage.getItem('prode-last-grupo');
+      const lastJugador = localStorage.getItem('prode-last-jugador');
+      if (lastGroup) {
+        try {
+          const snap = await db.ref(`grupos/${lastGroup}`).once('value');
+          if (snap.exists()) {
+            const grupo = snap.val();
+            grupo.id = lastGroup;
+            grupo.jugadores = grupo.jugadores || [];
+            const validJugador = lastJugador && grupo.jugadores.some(j => j.nombre === lastJugador);
+            this.enterGrupo(grupo, validJugador ? lastJugador : null);
+            this.loading = false;
+            return;
+          }
+        } catch (e) { console.error(e); }
+      }
+      this.loading = false;
+    },
+
+    fmtPlata(n) {
+      if (!n || n === 0) return '$0';
+      return '$' + Math.round(n).toLocaleString('es-AR');
+    },
+
+    bandera(team) { return BANDERAS[team] || '🏳️'; },
+
+    grupoColor(g) { return GRUPOS_MUNDIAL[g]?.color || '#facc15'; },
+
+    totalPozoGrupo(g) {
+      return (g.jugadores || []).reduce((s, j) => s + (j.plata || 0), 0);
+    },
+
+    get pozoForm() {
+      return this.jugadoresForm.reduce((s, j) => s + (j.plata || 0), 0);
+    },
+
+    get totalPozo() {
+      if (!this.grupoActual) return 0;
+      return (this.grupoActual.jugadores || []).reduce((s, j) => s + (j.plata || 0), 0);
+    },
+
+    get puedeCrear() {
+      return this.nombreGrupo.trim() &&
+             /^\d{4}$/.test(this.pinGrupo) &&
+             this.jugadoresForm.length >= 2 &&
+             this.yo;
+    },
+
+    get partidosFiltrados() {
+      if (this.filtroGrupo === 'TODOS') return PARTIDOS;
+      return PARTIDOS.filter(p => p.g === this.filtroGrupo);
+    },
+
+    get partidosAdmin() {
+      if (this.filtroAdmin === 'TODOS') return PARTIDOS;
+      return PARTIDOS.filter(p => p.g === this.filtroAdmin);
+    },
+
+    get partidosPorJornada() {
+      const map = {};
+      this.partidosFiltrados.forEach(p => {
+        if (!map[p.d]) map[p.d] = [];
+        map[p.d].push(p);
+      });
+      return Object.entries(map).sort(([a], [b]) => {
+        const [da, ma] = a.split('/').map(Number);
+        const [db, mb] = b.split('/').map(Number);
+        return ma - mb || da - db;
+      });
+    },
+
+    get ranking() {
+      if (!this.grupoActual) return [];
+      const tabla = (this.grupoActual.jugadores || []).map(jug => {
+        let puntos = 0, exactos = 0, ganadores = 0, jugados = 0;
+        const pronos = this.todosPronosticos[jug.nombre] || {};
+        Object.entries(pronos).forEach(([matchId, pron]) => {
+          if (this.resultados[matchId]) {
+            const p = calcularPuntos(pron, this.resultados[matchId]);
+            puntos += p;
+            jugados++;
+            if (p === 5) exactos++;
+            else if (p >= 2) ganadores++;
+          }
+        });
+        return { ...jug, puntos, exactos, ganadores, jugados };
+      });
+      tabla.sort((a, b) => b.puntos - a.puntos || b.exactos - a.exactos);
+      return tabla;
+    },
+
+    get repartos() {
+      if (!this.grupoActual?.conPlata || this.totalPozo === 0) return {};
+      const totalPuntos = this.ranking.reduce((s, r) => s + r.puntos, 0);
+      if (totalPuntos === 0) return {};
+      const r = {};
+      this.ranking.forEach(jug => {
+        r[jug.nombre] = (jug.puntos / totalPuntos) * this.totalPozo;
+      });
+      return r;
+    },
+
+    gananciaJugador(r) {
+      const reparto = this.repartos[r.nombre] || 0;
+      return reparto - (r.plata || 0);
+    },
+
+    repartoStyle(r) {
+      const g = this.gananciaJugador(r);
+      return `color: ${g > 0 ? '#10b981' : g < 0 ? '#ef4444' : '#94a3b8'}; font-weight: 700;`;
+    },
+
+    puntosPartido(matchId) {
+      const pron = this.pronosticos[matchId];
+      const real = this.resultados[matchId];
+      if (!pron || !real) return 0;
+      return calcularPuntos(pron, real);
+    },
+
+    textoPuntos(p) {
+      if (p === 5) return '★ EXACTO · 5pts';
+      if (p > 0) return '+' + p + ' pts';
+      return '0 pts';
+    },
+
+    badgeStyle(p) {
+      const bg = p === 5 ? '#facc15' : p > 0 ? '#10b981' : '#475569';
+      const color = p > 0 ? '#0a0e1a' : '#cbd5e1';
+      return `background: ${bg}; color: ${color};`;
+    },
+
+    resetForm() {
+      this.nombreGrupo = '';
+      this.montoEntrada = '';
+      this.conPlata = false;
+      this.jugadoresForm = [];
+      this.nuevoJugador = '';
+      this.montoJugador = '';
+      this.yo = '';
+      this.pinGrupo = '';
+    },
+
+    agregarJugadorForm() {
+      const nombre = this.nuevoJugador.trim();
+      if (!nombre) return;
+      if (this.jugadoresForm.some(j => j.nombre.toLowerCase() === nombre.toLowerCase())) {
+        alert('Ya está agregado'); return;
+      }
+      const plata = this.conPlata ? (parseFloat(this.montoJugador) || parseFloat(this.montoEntrada) || 0) : 0;
+      this.jugadoresForm.push({ nombre, plata });
+      if (!this.yo) this.yo = nombre;
+      this.nuevoJugador = '';
+      this.montoJugador = '';
+    },
+
+    quitarJugadorForm(nombre) {
+      this.jugadoresForm = this.jugadoresForm.filter(j => j.nombre !== nombre);
+      if (this.yo === nombre) this.yo = this.jugadoresForm[0]?.nombre || '';
+    },
+
+    async crearGrupo() {
+      if (!this.puedeCrear) {
+        if (!/^\d{4}$/.test(this.pinGrupo)) alert('El PIN debe ser de 4 dígitos numéricos');
+        else if (this.jugadoresForm.length < 2) alert('Agregá al menos 2 jugadores');
+        else if (!this.yo) alert('Marcá cuál sos vos');
+        return;
+      }
+      const id = this.nombreGrupo.toLowerCase().replace(/[^a-z0-9]/g, '-') + '-' + Date.now().toString(36);
+      const grupo = {
+        id,
+        nombre: this.nombreGrupo.trim(),
+        conPlata: this.conPlata,
+        montoEntrada: this.conPlata ? parseFloat(this.montoEntrada) || 0 : 0,
+        jugadores: this.jugadoresForm,
+        pin: this.pinGrupo,
+        creado: Date.now()
+      };
+      const grupoToSave = { ...grupo };
+      delete grupoToSave.id;
+      try {
+        await db.ref(`grupos/${id}`).set(grupoToSave);
+        localStorage.setItem(`prode-auth-${id}`, this.pinGrupo);
+        this.enterGrupo(grupo, this.yo);
+        this.showToast('Grupo creado · PIN: ' + this.pinGrupo);
+      } catch (e) {
+        alert('Error al crear el grupo: ' + e.message);
+      }
+    },
+
+    async buscarGrupo() {
+      if (!this.busqueda.trim()) return;
+      this.buscando = true;
+      this.yaBusque = true;
+      this.resultadosBusqueda = [];
+      try {
+        const snap = await db.ref('grupos').once('value');
+        if (snap.exists()) {
+          const all = snap.val();
+          const found = [];
+          const q = this.busqueda.toLowerCase();
+          Object.entries(all).forEach(([id, g]) => {
+            if (g.nombre && g.nombre.toLowerCase().includes(q)) {
+              found.push({ ...g, id, _expanded: false, jugadores: g.jugadores || [] });
+            }
+          });
+          this.resultadosBusqueda = found;
+        }
+      } catch (e) { console.error(e); }
+      this.buscando = false;
+    },
+
+    intentarEntrar(grupo, jugador) {
+      const savedPin = localStorage.getItem(`prode-auth-${grupo.id}`);
+      if (savedPin && savedPin === grupo.pin) {
+        this.enterGrupo(grupo, jugador);
+      } else {
+        this.grupoParaEntrar = grupo;
+        this.jugadorParaEntrar = jugador;
+        this.pinIngreso = '';
+        this.pinError = '';
+        this.pidiendoPin = true;
+      }
+    },
+
+    confirmarPin() {
+      if (!this.grupoParaEntrar) return;
+      if (this.pinIngreso === this.grupoParaEntrar.pin) {
+        localStorage.setItem(`prode-auth-${this.grupoParaEntrar.id}`, this.pinIngreso);
+        const grupo = this.grupoParaEntrar;
+        const jugador = this.jugadorParaEntrar;
+        this.pidiendoPin = false;
+        this.pinIngreso = '';
+        this.grupoParaEntrar = null;
+        this.jugadorParaEntrar = null;
+        this.enterGrupo(grupo, jugador);
+      } else {
+        this.pinError = 'PIN incorrecto';
+      }
+    },
+
+    enterGrupo(grupo, jugador) {
+      this.cleanupListeners();
+      this.grupoActual = grupo;
+      this.jugadorActual = jugador;
+      this.pantalla = 'grupo';
+      this.vista = 'partidos';
+      localStorage.setItem('prode-last-grupo', grupo.id);
+      if (jugador) localStorage.setItem('prode-last-jugador', jugador);
+      this.subscribeToGroup();
+    },
+
+    subscribeToGroup() {
+      if (!this.grupoActual) return;
+      const id = this.grupoActual.id;
+
+      const grupoRef = db.ref(`grupos/${id}`);
+      const grupoListener = grupoRef.on('value', snap => {
+        if (snap.exists()) {
+          const data = snap.val();
+          data.id = id;
+          data.jugadores = data.jugadores || [];
+          this.grupoActual = data;
+        }
+      });
+      this.listenerRefs.push({ ref: grupoRef, listener: grupoListener, type: 'value' });
+
+      const pronosRef = db.ref(`pronosticos/${id}`);
+      const pronosListener = pronosRef.on('value', snap => {
+        const data = snap.val() || {};
+        this.todosPronosticos = data;
+        if (this.jugadorActual) {
+          this.pronosticos = data[this.jugadorActual] || {};
+        }
+      });
+      this.listenerRefs.push({ ref: pronosRef, listener: pronosListener, type: 'value' });
+
+      const resRef = db.ref(`resultados/${id}`);
+      const resListener = resRef.on('value', snap => {
+        this.resultados = snap.val() || {};
+      });
+      this.listenerRefs.push({ ref: resRef, listener: resListener, type: 'value' });
+    },
+
+    cleanupListeners() {
+      this.listenerRefs.forEach(({ ref, listener, type }) => {
+        ref.off(type, listener);
+      });
+      this.listenerRefs = [];
+    },
+
+    salirGrupo() {
+      this.cleanupListeners();
+      this.grupoActual = null;
+      this.jugadorActual = null;
+      this.pantalla = 'inicio';
+      this.pronosticos = {};
+      this.todosPronosticos = {};
+      this.resultados = {};
+      localStorage.removeItem('prode-last-grupo');
+      localStorage.removeItem('prode-last-jugador');
+    },
+
+    abrirPartido(p) {
+      this.partidoActivo = p;
+    },
+
+    async guardarPronostico(matchId, h, a) {
+      if (this.resultados[matchId]) return;
+      if (!this.jugadorActual || !this.grupoActual) return;
+      try {
+        await db.ref(`pronosticos/${this.grupoActual.id}/${this.jugadorActual}/${matchId}`).set({ h, a });
+        this.partidoActivo = null;
+        this.showToast('Pronóstico guardado');
+      } catch (e) {
+        alert('Error al guardar: ' + e.message);
+      }
+    },
+
+    startEditRes(matchId) {
+      this.editingId = matchId;
+      this.editH = this.resultados[matchId]?.h ?? 0;
+      this.editA = this.resultados[matchId]?.a ?? 0;
+    },
+
+    async guardarResultado(matchId, h, a) {
+      if (!this.grupoActual) return;
+      try {
+        await db.ref(`resultados/${this.grupoActual.id}/${matchId}`).set({ h: parseInt(h) || 0, a: parseInt(a) || 0 });
+        this.showToast('Resultado guardado');
+      } catch (e) {
+        alert('Error: ' + e.message);
+      }
+    },
+
+    cambiarJugadorActual(nombre) {
+      this.jugadorActual = nombre;
+      localStorage.setItem('prode-last-jugador', nombre);
+      this.pronosticos = this.todosPronosticos[nombre] || {};
+      this.showJugadores = false;
+    },
+
+    iniciarEdicionJugadores() {
+      this.jugadoresEditar = JSON.parse(JSON.stringify(this.grupoActual.jugadores));
+      this.editandoJugadores = true;
+    },
+
+    agregarJugadorGrupo() {
+      const nombre = this.nuevoJugadorEdit.trim();
+      if (!nombre) return;
+      if (this.jugadoresEditar.some(j => j.nombre.toLowerCase() === nombre.toLowerCase())) {
+        alert('Ya existe ese jugador'); return;
+      }
+      const plata = this.grupoActual.conPlata ? (parseFloat(this.montoJugadorEdit) || this.grupoActual.montoEntrada || 0) : 0;
+      this.jugadoresEditar.push({ nombre, plata });
+      this.nuevoJugadorEdit = '';
+      this.montoJugadorEdit = '';
+    },
+
+    quitarJugadorGrupo(nombre) {
+      if (!confirm(`¿Sacar a ${nombre} del grupo? Se borran sus pronósticos.`)) return;
+      this.jugadoresEditar = this.jugadoresEditar.filter(j => j.nombre !== nombre);
+    },
+
+    async guardarJugadores() {
+      try {
+        await db.ref(`grupos/${this.grupoActual.id}/jugadores`).set(this.jugadoresEditar);
+        const eliminados = this.grupoActual.jugadores.filter(jg => !this.jugadoresEditar.some(je => je.nombre === jg.nombre));
+        for (const elim of eliminados) {
+          await db.ref(`pronosticos/${this.grupoActual.id}/${elim.nombre}`).remove();
+        }
+        this.editandoJugadores = false;
+        this.showToast('Jugadores actualizados');
+      } catch (e) {
+        alert('Error: ' + e.message);
+      }
+    },
+
+    compartirGrupo() {
+      const url = `${window.location.origin}${window.location.pathname}?g=${this.grupoActual.id}`;
+      const texto = `🏆 Sumate al Prode del Mundial!\n\n📍 Grupo: ${this.grupoActual.nombre}\n🔑 PIN: ${this.grupoActual.pin}\n👉 ${url}`;
+      if (navigator.share) {
+        navigator.share({ title: 'Prode 26', text: texto }).catch(() => {});
+      } else {
+        navigator.clipboard.writeText(texto).then(() => {
+          this.showToast('Copiado al portapapeles');
+        }).catch(() => {
+          prompt('Copiá este texto y mandáselo a tus amigos:', texto);
+        });
+      }
+    },
+
+    showToast(msg) {
+      this.toast = msg;
+      setTimeout(() => { this.toast = ''; }, 2500);
+    }
+  };
+}
+
+// Watcher para iniciar edición jugadores correctamente
+document.addEventListener('alpine:init', () => {
+  Alpine.data('prodeApp', prodeApp);
+});
+</script>
+
+</body>
+</html>
